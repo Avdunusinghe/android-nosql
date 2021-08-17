@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">android-nosql</string>
+    <string name="enter_title">Enter Title</string>
+    <string name="save">Save</string>
+</resources>
