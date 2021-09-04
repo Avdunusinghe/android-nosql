@@ -4,4 +4,5 @@
     <string name="save">Save</string>
     <string name="enter_thoughts">Enter thougths</string>
     <string name="show_datatext">Show Data</string>
+    <string name="update_data">Update All</string>
 </resources>

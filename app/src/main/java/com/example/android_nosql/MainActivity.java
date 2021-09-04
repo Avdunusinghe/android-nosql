@@ -23,12 +23,12 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements  View.OnClickListener{
 
     private static final String TAG = "Main Activity";
     private EditText enterTitle;
     private EditText enterThought;
-    private Button saveButton,showButton;
+    private Button saveButton,showButton,updateTitle;
     private TextView recTitle,recThought;
 
     //keys
@@ -45,14 +45,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         saveButton = findViewById(R.id.save_button);
+        updateTitle = findViewById(R.id.update_data);
         enterTitle = findViewById(R.id.edit_text_title);
         enterThought = findViewById(R.id.edit_text_thoughts);
         recThought = findViewById((R.id.rec_thought));
         recTitle = findViewById(R.id.rec_title);
         showButton = findViewById(R.id.show_data);
 
-
+        updateTitle.setOnClickListener(this);
 
         showButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -142,4 +144,40 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.update_data:
+                //call update
+                UpdateAll();
+                break;
+            
+        }
+    }
+
+    private void UpdateAll() {
+
+        String title = enterTitle.getText().toString().trim();
+        String thought = enterThought.getText().toString().trim();
+
+        Map<String,Object> data = new HashMap<>();
+        data.put(KEY_TITLE,title);
+        data.put(KEY_THOUGHT,thought);
+
+        journalRef.update(data).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+
+                Toast.makeText(MainActivity.this,"Updated!",
+                        Toast.LENGTH_LONG)
+                        .show();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull  Exception e) {
+
+            }
+        });
+
+    }
 }
