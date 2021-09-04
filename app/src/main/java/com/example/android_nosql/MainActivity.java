@@ -9,13 +9,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -111,4 +114,32 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        journalRef.addSnapshotListener(this,new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable  DocumentSnapshot documentSnapshot, @Nullable  FirebaseFirestoreException e) {
+
+                if(e !=null){
+
+                    Toast.makeText(MainActivity.this,"Something went wrong",
+                            Toast.LENGTH_LONG)
+                            .show();
+                }
+                if(documentSnapshot != null && documentSnapshot.exists()){
+
+                    String title = documentSnapshot.getString(KEY_TITLE);
+                    String thought = documentSnapshot.getString(KEY_THOUGHT);
+
+                    recTitle.setText(title);
+                    recThought.setText(thought);
+                }
+            }
+        });
+    }
+
+
 }
